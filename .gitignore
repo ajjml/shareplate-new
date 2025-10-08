@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.pyc
+*.pyo
+*.pyd
+*.env
+
+# Django
+media/
+staticfiles/
+db.sqlite3
+
+# VSCode / IDE
+.vscode/
+.idea/
+
+# Certificates (optional, if you don’t want to push)
+certs/

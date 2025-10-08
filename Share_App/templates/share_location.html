@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Share Location</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Leaflet Geocoder CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1650&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 25px;
+      color: #333;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+    h2 { text-align: center; margin-bottom: 20px; color: #2c3e50; }
+    form { display: grid; gap: 15px; }
+    label { font-weight: bold; color: #444; }
+    input, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; outline: none; }
+    input:focus, textarea:focus { border-color: #27ae60; }
+    #map { height: 400px; width: 100%; border-radius: 12px; margin-top: 15px; }
+    .btn { background: #27ae60; color: #fff; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+    .btn:hover { background: #219150; }
+    .locate-btn { background: #2980b9; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+    .locate-btn:hover { background: #21618c; }
+    .back-link a { color: #4CAF50; text-decoration: none; font-weight: bold; }
+    .back-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📍 Share Location</h2>
+    
+    <!-- ✅ Single form -->
+    <form method="POST" enctype="multipart/form-data" action="{% url 'share_location' %}">
+      {% csrf_token %}
+
+      <div>
+        <label for="sendername">Your Name:</label>
+        <input type="text" name="sender_name" id="sendername" placeholder="Enter your name" required>
+      </div>
+
+      <div>
+        <label for="phone">Phone Number (Optional):</label>
+        <input type="tel" name="phone_number" id="phone" placeholder="Enter phone number">
+      </div>
+
+      <div>
+        <label for="placename">Place / Center Name:</label>
+        <input type="text" name="place_name" id="placename" placeholder="e.g., Orphanage, Bus Stand, Roadside" required>
+      </div>
+
+      <div>
+        <label for="photo">Upload Photo (Optional):</label>
+        <input type="file" name="photo" id="photo" accept="image/*">
+      </div>
+
+      <!-- ✅ Hidden inputs for latitude/longitude -->
+      <input type="hidden" name="latitude" id="latitude">
+      <input type="hidden" name="longitude" id="longitude">
+
+      <div>
+        <label for="map">Select Location:</label>
+        <div id="map"></div>
+      </div>
+
+      <button type="button" class="locate-btn" onclick="findLocation()">📍 Use Current Location</button>
+      <button type="submit" class="btn">✅ Submit Location</button>
+    </form>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script>
+      // Initialize map
+      var map = L.map('map').setView([20.5937, 78.9629], 5); // India
+
+      // OpenStreetMap tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Geocoder (search)
+      var geocoder = L.Control.geocoder({ defaultMarkGeocode: false })
+        .on('markgeocode', function(e) {
+          var center = e.geocode.center;
+          L.marker(center).addTo(map).bindPopup(e.geocode.name).openPopup();
+          map.setView(center, 16);
+
+          // Update hidden inputs
+          document.getElementById('latitude').value = center.lat;
+          document.getElementById('longitude').value = center.lng;
+        }).addTo(map);
+
+      // Current location
+      function findLocation() {
+        map.locate({ setView: true, maxZoom: 16 });
+      }
+
+      function onLocationFound(e) {
+        var latlng = e.latlng;
+        L.marker(latlng).addTo(map).bindPopup("You are here").openPopup();
+        L.circle(latlng, e.accuracy / 2).addTo(map);
+
+        // Update hidden inputs
+        document.getElementById('latitude').value = latlng.lat;
+        document.getElementById('longitude').value = latlng.lng;
+      }
+
+      function onLocationError(e) {
+        alert(e.message);
+      }
+
+      map.on('locationfound', onLocationFound);
+      map.on('locationerror', onLocationError);
+
+      // Click on map to select location
+      map.on('click', function(e) {
+        var latlng = e.latlng;
+        L.marker(latlng).addTo(map).bindPopup("Selected Location").openPopup();
+
+        // Update hidden inputs
+        document.getElementById('latitude').value = latlng.lat;
+        document.getElementById('longitude').value = latlng.lng;
+      });
+    </script>
+
+    <div class="back-link">
+      <p><a href="{% url 'dashboard' %}">⬅ Back to Dashboard</a></p>
+    </div>
+  </div>
+</body>
+</html>

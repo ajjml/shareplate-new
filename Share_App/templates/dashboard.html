@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', sans-serif;
+            background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 13px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        header img {
+            height: 50px;
+        }
+
+        header nav a {
+            color: rgb(72, 121, 64);
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            flex: 1; /* Makes content take available space, pushing footer down */
+            position: relative;
+            z-index: 2;
+            padding: 40px;
+        }
+
+        .card-custom {
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-5px);
+        }
+
+        .food-list, .location-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .food-item, .location-item {
+            background: #f8f9fa;
+            border-left: 5px solid #28a745;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .food-item:hover, .location-item:hover {
+            background: #eaf9f0;
+        }
+
+        h1 {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        h4 {
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .btn-small {
+            font-size: 0.85rem;
+            padding: 3px 8px;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <img src="/media/logo.png" alt="SharePlate Logo">
+    </div>
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+    </nav>
+</header>
+
+<!-- Main Content -->
+<div class="content container-fluid">
+    <div class="row">
+        <!-- Left: Dashboard Actions -->
+        <div class="col-lg-8 mb-4">
+            <div class="text-center mb-5">
+                <h1>Welcome to Your Dashboard</h1>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-4">
+                    <div class="card card-custom shadow text-center p-4">
+                        <h3>🍲 Share Food</h3>
+                        <p>“Donate your extra food and turn a simple meal into hope and happiness for someone in need. 🍲❤️”</p>
+                        <a href="{% url 'share_food' %}" class="btn btn-success">Share Food</a>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card card-custom shadow text-center p-4">
+                        <h3>📍 Share Location</h3>
+                        <p>“Share the location of those in need and help deliver hope, food, and care to hearts that need it most. ❤️”</p>
+                        <a href="{% url 'share_location' %}" class="btn btn-success">Share Location</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Food & Location Details -->
+        <div class="col-lg-4">
+            <!-- Food Details -->
+            <div class="card card-custom shadow p-4 mb-4">
+                <h4 class="text-center mb-3">🍴 Food Details</h4>
+                <div class="food-list">
+                    {% if food_items %}
+                        {% for food in food_items %}
+                            <div class="food-item">
+                                <strong>{{ food.food_name }}</strong><br>
+                                Quantity: {{ food.quantity }}<br>
+                                <small class="text-muted">
+                                    Donor: {{ food.donor.username }}
+                                    {% if food.donor.profile.phone_number %} | 📞 {{ food.donor.profile.phone_number }}{% endif %}
+                                </small><br>
+                                {% if food.latitude and food.longitude %}
+                                    <a href="https://www.google.com/maps?q={{ food.latitude }},{{ food.longitude }}" target="_blank" class="btn btn-sm btn-outline-primary btn-small mt-1">
+                                        📍 View Location
+                                    </a><br>
+                                {% endif %}
+                                <small class="text-muted">
+                                    Added on {{ food.created_at|date:"M d, Y H:i" }}
+                                </small><br>
+                                {% if food.donor == request.user %}
+                                    <form method="post" action="{% url 'delete_food' food.pk %}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm mt-2 btn-small">Delete</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-center text-muted">No food shared yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Location Details -->
+            <div class="card card-custom shadow p-4">
+                <h4 class="text-center mb-3">📍 Shared Location Details</h4>
+                <div class="location-list">
+                    {% if needy_locations %}
+                        {% for loc in needy_locations %}
+                            <div class="location-item">
+                                <strong>{{ loc.place_name }}</strong><br>
+                                Added by: {{ loc.sender_name }}
+                                {% if loc.phone_number %} | 📞 {{ loc.phone_number }}{% endif %}<br>
+                                {% if loc.photo %}
+                                    <img src="{{ loc.photo.url }}" alt="{{ loc.place_name }}" class="img-fluid rounded my-2" style="max-height:150px;">
+                                {% endif %}
+                                {% if loc.latitude and loc.longitude %}
+                                    <a href="https://www.google.com/maps?q={{ loc.latitude }},{{ loc.longitude }}" target="_blank" class="btn btn-sm btn-outline-primary btn-small mt-1">
+                                        📍 View Location
+                                    </a><br>
+                                {% endif %}
+                                <small class="text-muted">
+                                    Added on {{ loc.created_at|date:"M d, Y H:i" }}
+                                </small><br>
+                                {% if loc.added_by == request.user %}
+                                    <form method="post" action="{% url 'delete_location' loc.pk %}" onsubmit="return confirm('Are you sure you want to delete this location?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm mt-2 btn-small">Delete</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-center text-muted">No locations shared yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>SharePlate brings together hearts willing to give and those in need. Every shared meal and location is a step towards a kinder world. ❤️</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

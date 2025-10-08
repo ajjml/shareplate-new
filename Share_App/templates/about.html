@@ -1,0 +1,114 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - SharePlate</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9fafb;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background: #ffffff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    header img {
+      height: 50px;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #49703e;
+    }
+
+    .about-container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    .about-container h1 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      color: #007bff;
+      text-align: center;
+    }
+
+    .about-container p {
+      font-size: 1.1rem;
+      margin: 15px 0;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      padding: 20px;
+      background: #f8f9fa;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <div>
+      <img src="/media/logo.png" alt="SharePlate Logo">
+    </div>
+    <nav>
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'about' %}">About</a>
+      <a href="{% url 'contact' %}">Contact</a>
+    </nav>
+  </header>
+
+  <!-- About Section -->
+  <div class="about-container">
+<h1 style="color: #4CAF50;">About SharePlate</h1>
+
+    <p>
+      Welcome to <strong>SharePlate</strong>, a project built with passion and dedication.  
+      This platform is designed to bring people together and make sharing meals, ideas, and connections easier.
+    </p>
+    <p>
+      My name is <strong>Muhammed Ajmal</strong>, and I’m from Palakkad, Kerala.  
+      I created SharePlate as a way to explore web development and deliver a solution that feels both simple and impactful.  
+    </p>
+    <p>
+      SharePlate isn’t just a project — it’s a step towards building meaningful applications 
+      that can grow and help communities connect better.
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 SharePlate | Built by Muhammed Ajmal
+  </footer>
+
+</body>
+</html>

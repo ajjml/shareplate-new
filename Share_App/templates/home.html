@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SharePlate - Home</title>
+  <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png">
+
   <style>
     * {
       margin: 0;
@@ -17,8 +19,10 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      background: #f9f9f9;
     }
 
+    /* Navbar */
     header {
       background: #def5d7;
       padding: 15px 40px;
@@ -29,11 +33,12 @@
     }
 
     header img {
-      height: 50px;
+      height: 55px;
+      max-width: 160px;
     }
 
     nav a {
-      margin-left: 20px;
+      margin-left: 25px;
       text-decoration: none;
       color: #333;
       font-weight: bold;
@@ -44,6 +49,7 @@
       color: #4CAF50;
     }
 
+    /* Hero Section */
     .hero {
       flex: 1;
       display: flex;
@@ -51,7 +57,7 @@
       align-items: center;
       flex-direction: column;
       text-align: center;
-      padding: 40px 20px;
+      padding: 60px 20px;
       background: url("https://images.unsplash.com/photo-1506354666786-959d6d497f1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80") no-repeat center center/cover;
       position: relative;
     }
@@ -64,25 +70,25 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 128, 0, 0.6);
-      backdrop-filter: blur(3px);
+      backdrop-filter: blur(2px);
     }
 
     .hero-content {
       position: relative;
       z-index: 2;
+      color: #fff;
     }
 
     .hero h1 {
       font-size: 3em;
-      color: #fff;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     .btn {
-      display: block;
-      width: 220px;
-      padding: 15px;
-      margin: 10px auto;
+      display: inline-block;
+      min-width: 200px;
+      padding: 14px;
+      margin: 12px;
       font-size: 18px;
       color: #fff;
       background: #4CAF50;
@@ -96,28 +102,36 @@
 
     .btn:hover {
       background: #45a049;
-      transform: scale(1.05);
+      transform: translateY(-2px);
     }
 
+    /* Footer */
     footer {
-      background: #333;
-      color: white;
+      background: #222;
+      color: #ddd;
       text-align: center;
-      padding: 30px 20px;
+      padding: 35px 20px;
+      margin-top: auto;
     }
 
     footer h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
+      font-size: 22px;
+      margin-bottom: 15px;
       color: #4CAF50;
     }
 
     footer p {
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1.6;
-      max-width: 600px;
-      margin: 0 auto;
-      color: #ddd;
+      max-width: 700px;
+      margin: 0 auto 10px;
+    }
+
+    footer small {
+      display: block;
+      margin-top: 15px;
+      font-size: 13px;
+      color: #aaa;
     }
   </style>
 </head>
@@ -148,12 +162,11 @@
     <h2>Why SharePlate?</h2>
     <p>
       SharePlate is a platform that connects people who want to donate food 
-      with those who need it the most. By reducing food waste and feeding 
+      with those who need it most. By reducing food waste and feeding 
       the hungry, we bring communities together to make a meaningful impact. 
-      Every small act of sharing creates a big difference.
+      Every act of sharing creates a difference.
     </p>
-    <br>
-    &copy; 2025 SharePlate. All Rights Reserved.
+    <small>&copy; 2025 SharePlate. All Rights Reserved.</small>
   </footer>
 
 </body>

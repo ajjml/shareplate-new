@@ -89,6 +89,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Static files
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'Share_App' / 'static']
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

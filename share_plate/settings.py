@@ -20,6 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary_storage',           # ADD this
+    'cloudinary',       
     'Share_App',
 ]
 
@@ -94,3 +96,20 @@ USE_I18N = True
 USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
+
+STORAGES = {
+  'default': {
+    'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+  },
+  'staticfiles': {
+    'BACKEND': 'django.core.files.storage.FileSystemStorage',
+  },
+}
+MEDIA_URL = '/media/'

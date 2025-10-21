@@ -34,3 +34,4 @@ Pillow
 dj-database-url
 python-decouple
 gunicorn
+psycopg[binary]

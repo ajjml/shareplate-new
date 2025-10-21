@@ -31,3 +31,6 @@ whitenoise==6.11.0
 cloudinary
 django-cloudinary-storage
 Pillow
+dj-database-url
+python-decouple
+gunicorn

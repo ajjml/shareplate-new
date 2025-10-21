@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,17 +70,27 @@ TEMPLATES = [
 WSGI_APPLICATION = 'share_plate.wsgi.application'
 
 # Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'share_plate',
-        'USER': 'root',
-        'PASSWORD': 'ajmal@153153',
-        'HOST':'localhost',
-        'POST': '3306'
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'share_plate',
+#         'USER': 'root',
+#         'PASSWORD': 'ajmal@153153',
+#         'HOST':'localhost',
+#         'POST': '3306'
 
-    }
+#     }
+# }
+
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
+
 
 
 

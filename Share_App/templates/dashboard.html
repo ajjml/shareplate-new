@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +12,7 @@
   <!-- Navbar -->
   <header class="bg-white shadow-md py-4 px-10 flex items-center justify-between z-10">
     <div>
-      <img src="/media/logo.png" alt="SharePlate Logo" class="h-12">
+      <img src="{% static 'images/logo.png' %}" alt="SharePlate Logo" class="h-11 md:h-12">
     </div>
     <nav class="space-x-6">
       <a href="{% url 'home' %}" class="text-green-800 font-semibold hover:text-green-500 transition">Home</a>

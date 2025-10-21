@@ -4,194 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SharePlate - Login</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    /* Navbar */
-    header {
-      background: #ffffff;
-      padding: 15px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 10;
-    }
-
-    header img {
-      height: 50px;
-    }
-
-    nav a {
-      margin-left: 20px;
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #4CAF50;
-    }
-
-    /* Hero Section with background */
-    .hero {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 40px 20px;
-      background: url("https://images.unsplash.com/photo-1506354666786-959d6d497f1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80") no-repeat center center/cover;
-      position: relative;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 128, 0, 0.6); /* green overlay */
-      backdrop-filter: blur(3px);
-    }
-
-    .login-container {
-      position: relative;
-      z-index: 2;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 40px 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-
-    .login-container h2 {
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    .login-container input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-
-    .btn {
-      display: inline-block;
-      width: 100%;
-      padding: 12px;
-      font-size: 18px;
-      color: #fff;
-      background: #4CAF50;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-      font-weight: bold;
-      margin-top: 15px;
-    }
-
-    .btn:hover {
-      background: #45a049;
-      transform: scale(1.03);
-    }
-
-    .extra-links {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    .extra-links a {
-      color: #4CAF50;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .extra-links a:hover {
-      text-decoration: underline;
-    }
-
-    /* Footer */
-    footer {
-      background: #333;
-      color: white;
-      text-align: center;
-      padding: 20px 10px;
-    }
-
-    footer p {
-      font-size: 14px;
-      color: #ddd;
-    }
-
-    .error-msg {
-      color: red;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="flex flex-col min-h-screen font-sans bg-gray-50">
 
   <!-- Navbar -->
-  <header>
+  <header class="bg-white shadow-md py-4 px-10 flex items-center justify-between">
     <div>
-      <img src="/media/logo.png" alt="SharePlate Logo">
+      <img src="/media/logo.png" alt="SharePlate Logo" class="h-12">
     </div>
-    <nav>
-      <a href="{% url 'home' %}">Home</a>
-      <a href="{% url 'about' %}">About</a>
-      <a href="{% url 'contact' %}">Contact</a>
+    <nav class="space-x-6">
+      <a href="{% url 'home' %}" class="text-gray-800 font-semibold hover:text-green-500 transition">Home</a>
+      <a href="{% url 'about' %}" class="text-gray-800 font-semibold hover:text-green-500 transition">About</a>
+      <a href="{% url 'contact' %}" class="text-gray-800 font-semibold hover:text-green-500 transition">Contact</a>
     </nav>
   </header>
 
   <!-- Hero / Login Form -->
-  <section class="hero">
-    <div class="login-container">
-      <h2>Login to SharePlate</h2>
+  <section class="flex-1 flex items-center justify-center relative bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1506354666786-959d6d497f1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');">
+    <div class="absolute inset-0 bg-green-600 bg-opacity-60 backdrop-blur-sm"></div>
+    <div class="relative z-10 bg-white bg-opacity-95 rounded-xl shadow-xl p-10 max-w-md w-full text-center">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Login to SharePlate</h2>
       
-      <!-- Single login form -->
-      <form method="POST" action="{% url 'login' %}">
+      <!-- Login Form -->
+      <form method="POST" action="{% url 'login' %}" class="space-y-4">
         {% csrf_token %}
-        <input type="text" name="username" placeholder="Username or Email" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit" class="btn">Login</button>
+        <input type="text" name="username" placeholder="Username or Email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+        <input type="password" name="password" placeholder="Password" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+        <button type="submit" class="w-full py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition transform hover:scale-105">Login</button>
       </form>
 
-      <!-- Error message -->
+      <!-- Error Message -->
       {% if error %}
-        <p class="error-msg">{{ error }}</p>
+        <p class="text-red-500 mt-4 font-semibold">{{ error }}</p>
       {% endif %}
 
-      <!-- Extra links -->
-      <div class="extra-links">
-        <p><a href="{% url 'password_reset' %}">Forgot Password?</a></p>
-        <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+      <!-- Extra Links -->
+      <div class="mt-4 text-sm text-gray-700">
+        <p><a href="{% url 'password_reset' %}" class="text-green-500 font-semibold hover:underline">Forgot Password?</a></p>
+        <p>Don't have an account? <a href="{% url 'register' %}" class="text-green-500 font-semibold hover:underline">Register</a></p>
       </div>
-
     </div>
   </section>
 
   <!-- Footer -->
-  <footer>
+  <footer class="bg-gray-900 text-gray-300 text-center py-6 mt-auto">
     <p>&copy; 2025 SharePlate. All Rights Reserved.</p>
   </footer>
 

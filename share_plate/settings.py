@@ -107,6 +107,15 @@ CLOUDINARY_STORAGE = {
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET')
 }
+
+# Media files (uploads)
+MEDIA_URL = '/media/'
+if os.environ.get("RENDER") == "true":
+    # Render persistent volume path
+    MEDIA_ROOT = Path("/opt/render/project/media")
+else:
+    MEDIA_ROOT = BASE_DIR / 'media'
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},

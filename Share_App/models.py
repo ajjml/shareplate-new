@@ -3,30 +3,30 @@ from django.contrib.auth.models import User
 from decimal import Decimal
 
 # Food Donation Model
-class FoodDonation(models.Model):
-    donor = models.ForeignKey(User, on_delete=models.CASCADE)
-    food_name = models.CharField(max_length=100)
-    quantity = models.CharField(max_length=50)
-    expiry_date = models.DateField()
+# class FoodDonation(models.Model):
+#     donor = models.ForeignKey(User, on_delete=models.CASCADE)
+#     food_name = models.CharField(max_length=100)
+#     quantity = models.CharField(max_length=50)
+#     expiry_date = models.DateField(null=True, blank=True)
     
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
+#     latitude = models.FloatField(blank=True, null=True)
+#     longitude = models.FloatField(blank=True, null=True)
     
-    STATUS_CHOICES = [
-        ("Pending", "Pending"),
-        ("Delivered", "Delivered"),
-    ]
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Pending")
-    created_at = models.DateTimeField(auto_now_add=True)
+#     STATUS_CHOICES = [
+#         ("Pending", "Pending"),
+#         ("Delivered", "Delivered"),
+#     ]
+#     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Pending")
+#     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.food_name} ({self.quantity}) - {self.status}"
+#     def __str__(self):
+#         return f"{self.food_name} ({self.quantity}) - {self.status}"
 
-    @property
-    def google_maps_link(self):
-        if self.latitude and self.longitude:
-            return f"https://www.google.com/maps?q={self.latitude},{self.longitude}"
-        return None
+#     @property
+#     def google_maps_link(self):
+#         if self.latitude and self.longitude:
+#             return f"https://www.google.com/maps?q={self.latitude},{self.longitude}"
+#         return None
 
 
 # Needy Location Model
@@ -50,3 +50,41 @@ class NeedyLocation(models.Model):
             return f"https://www.google.com/maps?q={self.latitude},{self.longitude}"
         return None
 
+# from django.db import models
+# from django.contrib.auth.models import User
+# from decimal import Decimal
+
+class FoodDonation(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Delivered', 'Delivered'),
+    ]
+
+    donor = models.ForeignKey(User, on_delete=models.CASCADE)
+    donor_phone = models.CharField(max_length=15, blank=True, null=True)
+
+    food_name = models.CharField(max_length=200)
+    quantity = models.CharField(max_length=100)
+    expiry_date = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    photo = models.ImageField(upload_to='food_photos/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.food_name} by {self.donor.username}"
+
+
+# class NeedyLocation(models.Model):
+#     added_by = models.ForeignKey(User, on_delete=models.CASCADE)
+#     sender_name = models.CharField(max_length=150)
+#     phone_number = models.CharField(max_length=15)
+#     place_name = models.CharField(max_length=200)
+#     photo = models.ImageField(upload_to='needy_photos/', null=True, blank=True)
+#     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+#     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"{self.place_name} ({self.sender_name})"

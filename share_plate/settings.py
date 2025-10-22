@@ -70,7 +70,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'share_plate.wsgi.application'
 
-# Database
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',

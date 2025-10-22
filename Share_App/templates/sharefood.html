@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Share Location</title>
+  <title>Share Food</title>
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <!-- Leaflet Geocoder CSS -->
@@ -12,12 +13,11 @@
     body, html {
       height: 100%;
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1650&q=80') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
     }
-
     .container {
       max-width: 900px;
       margin: 30px auto;
@@ -27,83 +27,24 @@
       color: #333;
       box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #2c3e50;
-    }
-
-    form {
-      display: grid;
-      gap: 15px;
-    }
-
-    label {
-      font-weight: bold;
-      color: #444;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      outline: none;
-    }
-
-    input:focus, textarea:focus {
-      border-color: #27ae60;
-    }
-
-    #map {
-      height: 400px;
-      width: 100%;
-      border-radius: 12px;
-      margin-top: 15px;
-    }
-
-    .btn {
-      background: #27ae60;
-      color: #fff;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .btn:hover {
-      background: #219150;
-    }
-
-    .locate-btn {
-      background: #2980b9;
-      color: white;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .locate-btn:hover {
-      background: #21618c;
-    }
-
-    .back-link a {
-      color: #4CAF50;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .back-link a:hover {
-      text-decoration: underline;
-    }
+    h2 { text-align: center; margin-bottom: 20px; color: #2c3e50; }
+    form { display: grid; gap: 15px; }
+    label { font-weight: bold; color: #444; }
+    input, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; outline: none; }
+    input:focus, select:focus { border-color: #27ae60; }
+    #map { height: 400px; width: 100%; border-radius: 12px; margin-top: 15px; }
+    .btn { background: #27ae60; color: #fff; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+    .btn:hover { background: #219150; }
+    .locate-btn { background: #2980b9; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+    .locate-btn:hover { background: #21618c; }
+    .back-link a { color: #4CAF50; text-decoration: none; font-weight: bold; }
+    .back-link a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>📍 Share food</h2>
+    <h2>🍱 Share Food</h2>
+
     <form method="POST" enctype="multipart/form-data" action="{% url 'share_food' %}">
       {% csrf_token %}
 
@@ -118,8 +59,26 @@
       </div>
 
       <div>
-        <label for="placename">Place / Center Name:</label>
-        <input type="text" name="place_name" id="placename" placeholder="e.g., Orphanage, Bus Stand, Roadside" required>
+        <label for="food_name">Food Name:</label>
+        <input type="text" name="food_name" id="food_name" placeholder="e.g. Veg Biryani" required>
+      </div>
+
+      <div>
+        <label for="quantity">Quantity:</label>
+        <input type="text" name="quantity" id="quantity" placeholder="e.g. 5 Plates" required>
+      </div>
+
+      <div>
+        <label for="expiry_date">Expiry Date (optional):</label>
+        <input type="date" name="expiry_date" id="expiry_date">
+      </div>
+
+      <div>
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+          <option value="Pending">Pending</option>
+          <option value="Delivered">Delivered</option>
+        </select>
       </div>
 
       <div>
@@ -137,7 +96,7 @@
       </div>
 
       <button type="button" class="locate-btn" onclick="findLocation()">📍 Use Current Location</button>
-      <button type="submit" class="btn">✅ Submit Location</button>
+      <button type="submit" class="btn">✅ Submit Food Donation</button>
     </form>
 
     <!-- Leaflet JS -->
@@ -146,8 +105,6 @@
     <script>
       // Initialize map
       var map = L.map('map').setView([20.5937, 78.9629], 5); // India
-
-      // OpenStreetMap tiles
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(map);
@@ -158,21 +115,9 @@
           var center = e.geocode.center;
           L.marker(center).addTo(map).bindPopup(e.geocode.name).openPopup();
           map.setView(center, 16);
-
-          // Update hidden inputs
           document.getElementById('latitude').value = center.lat;
           document.getElementById('longitude').value = center.lng;
         }).addTo(map);
-
-      // Click on map to select location
-      map.on('click', function(e) {
-        var latlng = e.latlng;
-        L.marker(latlng).addTo(map).bindPopup("Selected Location").openPopup();
-
-        // Update hidden inputs
-        document.getElementById('latitude').value = latlng.lat;
-        document.getElementById('longitude').value = latlng.lng;
-      });
 
       // Current location
       function findLocation() {
@@ -183,8 +128,6 @@
         var latlng = e.latlng;
         L.marker(latlng).addTo(map).bindPopup("You are here").openPopup();
         L.circle(latlng, e.accuracy / 2).addTo(map);
-
-        // Set hidden inputs
         document.getElementById('latitude').value = latlng.lat;
         document.getElementById('longitude').value = latlng.lng;
       }
@@ -195,6 +138,14 @@
 
       map.on('locationfound', onLocationFound);
       map.on('locationerror', onLocationError);
+
+      // Click on map to select location
+      map.on('click', function(e) {
+        var latlng = e.latlng;
+        L.marker(latlng).addTo(map).bindPopup("Selected Location").openPopup();
+        document.getElementById('latitude').value = latlng.lat;
+        document.getElementById('longitude').value = latlng.lng;
+      });
     </script>
 
     <div class="back-link">

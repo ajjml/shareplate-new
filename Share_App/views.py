@@ -69,24 +69,29 @@ def dashboard(request):
 
 # ------------------ Food Donation ------------------
 @login_required
+@login_required
 def share_food_view(request):
     if request.method == "POST":
         food_name = request.POST.get("food_name")
         quantity = request.POST.get("quantity")
-        expiry_date = request.POST.get("expiry_date")
+        expiry_date = request.POST.get("expiry_date") or None
         status = request.POST.get("status")
+        donor_phone = request.POST.get("phone_number")  # new field
 
         latitude = request.POST.get("latitude")
         longitude = request.POST.get("longitude")
+        photo = request.FILES.get("photo")  # handle uploaded image
 
         FoodDonation.objects.create(
             donor=request.user,
+            donor_phone=donor_phone,  # new field
             food_name=food_name,
             quantity=quantity,
             expiry_date=expiry_date,
             status=status,
             latitude=float(latitude) if latitude not in [None, ''] else None,
             longitude=float(longitude) if longitude not in [None, ''] else None,
+            photo=photo
         )
         return redirect("dashboard")
 

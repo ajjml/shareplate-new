@@ -79,7 +79,6 @@ WSGI_APPLICATION = 'share_plate.wsgi.application'
 #         'PASSWORD': 'ajmal@153153',
 #         'HOST':'localhost',
 #         'POST': '3306'
-
 #     }
 # }
 
@@ -91,8 +90,6 @@ DATABASES = {
         ssl_require=True
     )
 }
-
-
 
 
 # Media files (uploads)

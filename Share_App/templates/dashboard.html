@@ -22,7 +22,7 @@
   </header>
 
   <!-- Hero Background -->
-  <div class="relative bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');">
+  <div class="relative bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1350&q=80');">
     <div class="absolute inset-0 bg-green-600 bg-opacity-60 backdrop-blur-sm"></div>
     <div class="relative z-10 container mx-auto py-16">
       <h1 class="text-white text-4xl md:text-5xl font-bold text-center mb-12">Welcome to Your Dashboard</h1>
@@ -103,17 +103,21 @@
               <strong>{{ loc.place_name }}</strong><br>
               Added by: {{ loc.sender_name }}
               {% if loc.phone_number %} | 📞 {{ loc.phone_number }}{% endif %}<br>
+
               {% if loc.photo %}
                 <img src="{{ loc.photo.url }}" alt="{{ loc.place_name }}" class="rounded my-2 max-h-40 object-cover w-full">
               {% endif %}
+
               {% if loc.latitude and loc.longitude %}
                 <a href="https://www.google.com/maps?q={{ loc.latitude }},{{ loc.longitude }}" target="_blank" class="text-green-500 font-semibold hover:underline mt-2 inline-block">
                   📍 View Location
                 </a><br>
               {% endif %}
+
               <small class="text-gray-400">
                 Added on {{ loc.created_at|date:"M d, Y H:i" }}
               </small><br>
+
               {% if loc.added_by == request.user %}
                 <form method="post" action="{% url 'delete_location' loc.pk %}" onsubmit="return confirm('Are you sure you want to delete this location?');" class="mt-2">
                   {% csrf_token %}
